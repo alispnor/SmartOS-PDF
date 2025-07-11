@@ -1,34 +1,185 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         colors="true"
->
-    <testsuites>
-        <testsuite name="Unit">
-            <directory>tests/Unit</directory>
-        </testsuite>
-        <testsuite name="Feature">
-            <directory>tests/Feature</directory>
-        </testsuite>
-    </testsuites>
-    <source>
-        <include>
-            <directory>app</directory>
-        </include>
-    </source>
-    <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
-        <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_STORE" value="array"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
-        <env name="MAIL_MAILER" value="array"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
-        <env name="SESSION_DRIVER" value="array"/>
-        <env name="PULSE_ENABLED" value="false"/>
-        <env name="TELESCOPE_ENABLED" value="false"/>
-        <env name="NIGHTWATCH_ENABLED" value="false"/>
-    </php>
-</phpunit>
+# SmartOS-PDF 🚀
+
+## Visão Geral do Projeto
+
+SmartOS-PDF é uma aplicação web desenvolvida em **PHP com o framework Laravel** que tem como principal objetivo a **geração dinâmica de Ordens de Serviço (OS) em formato PDF**, com base em um layout visual específico e dados dinâmicos. O projeto foca em alta fidelidade visual, adaptabilidade a diferentes quantidades de itens e controle preciso de quebras de página para impressão.
+
+## Desafio Técnico Abordado
+
+Este projeto foi construído para resolver um desafio técnico que exigia a reconstrução de um formulário de Ordem de Serviço em PDF. Os principais critérios técnicos incluíram:
+
+* **Fidelidade Visual:** O PDF gerado deve ser idêntico ao modelo visual fornecido (anexo no desafio original).
+* **Conteúdo Dinâmico:** A quantidade de itens da Ordem de Serviço (dados da aeronave e itens de serviço de manutenção) é variável e pode conter até mais de 80 itens, com alturas de texto dinâmicas.
+* **Quebra de Página Precisa:**
+    * Margem superior fixa de 1 cm até o cabeçalho.
+    * Margem inferior mínima de 1 cm.
+    * Itens não devem ser cortados na quebra de página.
+    * O cabeçalho do formulário deve aparecer **apenas na primeira página**.
+    * As páginas seguintes devem manter a margem superior de 1 cm sem o cabeçalho completo.
+
+## Tecnologias Utilizadas
+
+* **PHP 8.x**
+* **Laravel Framework 10.x / 11.x** (Compatível com a versão mais recente do desafio)
+* **MySQL** (Para armazenamento dos dados da Ordem de Serviço)
+* **wkhtmltopdf**: Ferramenta de linha de comando para conversão de HTML para PDF.
+* **Laravel Snappy**: Pacote Laravel para integração com `wkhtmltopdf`.
+* **WSL (Windows Subsystem for Linux)**: Ambiente de desenvolvimento para executar o Ubuntu/Linux no Windows.
+
+## Funcionalidades Chave
+
+* **Geração de PDF de Alta Qualidade:** Utiliza `wkhtmltopdf` para renderizar HTML/CSS complexo em PDFs, garantindo fidelidade visual ao design original.
+* **Layout Adaptativo:** O layout se ajusta automaticamente à quantidade de itens e ao conteúdo textual, controlando a quebra de página.
+* **Cabeçalhos e Rodapés Dinâmicos:** Suporte para cabeçalhos que aparecem apenas na primeira página e rodapés com numeração de página precisa.
+* **Estrutura de Código Limpa:** O projeto segue princípios de Clean Code e SOLID (SRP, OCP, DIP) para garantir manutenibilidade e escalabilidade.
+
+## Configuração e Instalação
+
+Siga os passos abaixo para configurar e rodar o projeto em seu ambiente de desenvolvimento.
+
+### Pré-requisitos
+
+* PHP 8.x
+* Composer
+* MySQL Server
+* WSL (Windows Subsystem for Linux) com Ubuntu (ou outra distribuição Linux)
+* `wkhtmltopdf` instalado no seu ambiente WSL.
+
+### 1. Clonar o Repositório
+
+```bash
+git clone [https://github.com/alispnor/SmartOS-PDF.git](https://github.com/alispnor/SmartOS-PDF.git)
+cd SmartOS-PDF
+
+### 2. Configurar o Projeto Laravel
+Como o repositório já existe, você precisará configurar a aplicação Laravel nele.
+
+Bash
+
+# Instalar dependências do Composer
+composer install
+
+# Copiar o arquivo .env de exemplo
+cp .env.example .env
+
+# Gerar a chave da aplicação
+php artisan key:generate
+3. Configurar o Banco de Dados (.env)
+Abra o arquivo .env e configure as credenciais do seu banco de dados MySQL no WSL.
+
+Snippet de código
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=aero_os_gen # Ou o nome do seu banco de dados
+DB_USERNAME=root         # Ou seu usuário MySQL
+DB_PASSWORD=             # Sua senha do MySQL
+Criar o Banco de Dados:
+
+No seu terminal WSL, acesse o cliente MySQL e crie o banco de dados:
+
+Bash
+
+mysql -u root -p
+No prompt mysql>:
+
+SQL
+
+CREATE DATABASE aero_os_gen CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+exit;
+4. Instalar e Configurar wkhtmltopdf no WSL
+Se você ainda não tem wkhtmltopdf instalado, siga estes passos. É recomendável usar o pacote wkhtmltox para melhor compatibilidade.
+
+Desinstalar versões anteriores (se houver):
+
+Bash
+
+sudo apt remove --purge wkhtmltopdf
+sudo apt autoremove
+Baixar wkhtmltox (para Ubuntu 22.04 LTS "Jammy", compatível com 24.04):
+Vá para https://wkhtmltopdf.org/downloads.html, procure por "Jammy Jellyfish" (ou a versão compatível com seu Ubuntu WSL) e copie o link .deb para amd64.
+
+Bash
+
+wget <LINK_DO_ARQUIVO_.DEB_COPIADO_DO_SITE>
+# Exemplo: wget [https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb](https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb)
+Instalar o pacote:
+
+Bash
+
+sudo apt install ./<NOME_DO_ARQUIVO_BAIXADO>.deb
+Verificar o caminho do binário:
+
+Bash
+
+which wkhtmltopdf
+# Geralmente será /usr/local/bin/wkhtmltopdf ou /usr/bin/wkhtmltopdf
+Configurar o caminho no .env do Laravel:
+
+Snippet de código
+
+WKHTMLTOPDF_BINARY="/usr/local/bin/wkhtmltopdf" # Use o caminho exato retornado pelo 'which'
+5. Instalar Laravel Snappy e Publicar Configurações
+Bash
+
+composer require barryvdh/laravel-snappy
+php artisan vendor:publish --provider="Barryvdh\Snappy\ServiceProvider"
+6. Configurar o Laravel Snappy (config/snappy.php)
+Abra config/snappy.php e configure a seção pdf.
+
+PHP
+
+// config/snappy.php
+    'pdf' => [
+        'enabled' => true,
+        'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/bin/wkhtmltopdf'),
+        'timeout' => false,
+        'options' => [
+            'print-media-type'         => true,
+            'enable-local-file-access' => true,  # Manter true para carregar logo
+            'encoding'                 => 'UTF-8',
+            'no-stop-slow-scripts'     => true,
+            'enable-javascript'        => true,  # Manter true se você usar JS em cabeçalho/rodapé
+        ],
+        'keep-temp' => true, # Útil para depurar arquivos HTML temporários
+        'env'     => [
+            'LANG' => env('SNAPPY_PDF_ENV_LANG', 'en_US.UTF-8'), # Para problemas de codificação
+        ],
+    ],
+7. Ajustar Service Provider e Classes de Serviço
+Certifique-se de que seus arquivos estão como configurados nas instruções da etapa final da depuração:
+
+app/Providers/PdfServiceProvider.php (vincula PdfGenerator a SnappyPdfGenerator).
+
+app/Contracts/PdfGenerator.php (interface).
+
+app/Services/Pdf/SnappyPdfGenerator.php (implementação de PdfGenerator, usando o Facade SnappyPdf).
+
+app/Services/Pdf/ServiceOrderPdfService.php (orquestrador da lógica de geração de PDF, passando opções e HTMLs).
+
+8. Rodar Migrações e Seeders
+Bash
+
+php artisan migrate:fresh --seed
+9. Limpar Cache e Iniciar Servidor
+Bash
+
+php artisan optimize:clear
+php artisan serve
+Uso
+Para gerar uma Ordem de Serviço em PDF, acesse a seguinte rota no seu navegador:
+
+[http://127.0.0.1:8000/os/](http://127.0.0.1:8000/os/){id}/pdf
+Substitua {id} pelo ID de uma Ordem de Serviço existente no seu banco de dados (por exemplo, 1, que é criada pelos seeders).
+
+Depuração e Ajustes Finos
+A replicação exata do layout é um processo iterativo de ajuste de CSS.
+
+Inspecionar HTML Temporário: Com keep-temp ativo, os arquivos HTML temporários serão salvos em /tmp (ou no diretório configurado). Acesse-os via \\wsl.localhost\Ubuntu\tmp\ no Explorador de Arquivos do Windows e abra-os no navegador (F12) para depurar CSS e JavaScript.
+
+Ajustar CSS: Modifique o CSS nas views Blade (especialmente pdf.partials.header.blade.php, pdf.partials.footer.blade.php e pdf.service-order.blade.php) para controlar width, height, padding, margin, font-size, line-height, border-collapse, vertical-align etc., para corresponder ao design original.
+
+Ajustar Margens Globais: No app/Services/Pdf/ServiceOrderPdfService.php, ajuste margin-top, margin-bottom, header-spacing, footer-spacing para controlar o espaço reservado para cabeçalhos/rodapés e o espaçamento entre eles e o corpo do documento. Meça as alturas reais dos seus cabeçalhos/rodapés HTML no navegador.
+
+Revalidar JS de Quebra de Página: Para cabeçalhos que aparecem apenas na primeira página, o JavaScript no header.blade.php precisa ser preciso. Teste com documentos de múltiplas páginas.

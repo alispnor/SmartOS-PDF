@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Pdf; // <--- VERIFIQUE ESTE NAMESPACE
+namespace App\Services\Pdf;
 
 use App\Contracts\PdfGenerator;
-use Barryvdh\Snappy\Facades\SnappyPdf; // Ou injete Barryvdh\Snappy\PdfWrapper
-use Barryvdh\Snappy\PdfWrapper; // Certifique-se de importar o PdfWrapper
-use Illuminate\Support\Facades\Log; // Importe o Log
+use Barryvdh\Snappy\Facades\SnappyPdf; // Use o Facade
+use Barryvdh\Snappy\PdfWrapper;
+use Illuminate\Support\Facades\Log;
 
 class SnappyPdfGenerator implements PdfGenerator
 {
@@ -16,10 +16,7 @@ class SnappyPdfGenerator implements PdfGenerator
 
         $pdf = SnappyPdf::loadHTML($htmlContent);
 
-        // Adicione as opções, mas cuidado para não passar opções desconhecidas
         foreach ($mergedOptions as $key => $value) {
-            // Certifique-se de que 'tmp' ou 'keep-temp' não estão mais aqui
-            // E que as opções são válidas para o Snappy ou wkhtmltopdf
             try {
                 $pdf->setOption($key, $value);
             } catch (\InvalidArgumentException $e) {
@@ -27,23 +24,9 @@ class SnappyPdfGenerator implements PdfGenerator
             }
         }
 
-        // --- Adicionar Logging do Comando Final ---
-        // Este é um hack para depurar, pois não há um método público para obter o comando completo facilmente.
-        // Você pode precisar ir para o vendor/knplabs/knp-snappy/src/Knp/Snappy/AbstractGenerator.php
-        // e adicionar um log lá no método 'execute' ou 'get  Output'.
-
-        // ALTERNATIVA DE DEBUG (mais fácil): Logar as opções que serão passadas
-        Log::debug('SnappyPdfGenerator: Opções finais passadas para o PDF:', $mergedOptions);
+        Log::debug('SnappyPdfGenerator: Opções finais passadas para o PDF:', $pdf->getOptions());
 
         try {
-            // Se 'keep-temp' está no config/snappy.php, ele deve funcionar.
-            // Se ainda não vê os temp files, o problema pode estar na construção do PdfWrapper
-            // ou como o wkhtmltopdf lida com os temporários em si.
-
-            // Para forçar a geração de um arquivo de debug para o cabeçalho/rodapé
-            // O wkhtmltopdf os cria como temporários de qualquer forma para o comando
-            // principal. O problema é que eles podem ser apagados ou não criados se o wkhtmltopdf falhar.
-
             return $pdf;
         } catch (\Exception $e) {
             Log::error('SnappyPdfGenerator: Erro ao gerar PDF com wkhtmltopdf.', [
@@ -51,7 +34,7 @@ class SnappyPdfGenerator implements PdfGenerator
                 'trace' => $e->getTraceAsString(),
                 'options_sent' => $mergedOptions
             ]);
-            throw $e; // Relança a exceção para que o controlador a capture
+            throw $e;
         }
     }
 }

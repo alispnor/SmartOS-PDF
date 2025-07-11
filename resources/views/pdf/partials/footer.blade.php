@@ -9,7 +9,6 @@
             text-align: center;
             font-family: Arial, sans-serif;
             font-size: 8pt;
-            border-top: 1px solid #ccc;
             padding-top: 5px;
             padding-bottom: 5px;
             box-sizing: border-box;
@@ -29,7 +28,6 @@
     <div class="footer-container">
         <div class="footer-content">
             <span class="float-left">{{ $serviceOrder->document_reference }}</span>
-            <span class="float-right">Página <span class="page"></span> de <span class="topage"></span></span>
         </div>
     </div>
 </body>

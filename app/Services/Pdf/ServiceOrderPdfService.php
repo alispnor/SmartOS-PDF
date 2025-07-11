@@ -36,8 +36,7 @@ class ServiceOrderPdfService
         $order->load(['aircraftParts', 'serviceItems']);
 
         // 2. Preparar os Dados para a View
-        // Organiza os dados da ServiceOrder para serem facilmente acessíveis nos templates Blade.
-        // Agrupamos aircraftParts por tipo para facilitar a iteração na tabela.
+       
         $data = [
             'serviceOrder'  => $order,
             'aircraftParts' => $order->aircraftParts->groupBy('type'),
@@ -61,7 +60,6 @@ class ServiceOrderPdfService
             'enable-local-file-access' => true,
             'encoding'               => 'UTF-8',
             'no-stop-slow-scripts'   => true,
-            'enable-local-file-access' => true,
             'enable-javascript'      => true,
             'header-html'            => $headerHtml,
             'footer-html'            => $footerHtml,
@@ -71,6 +69,7 @@ class ServiceOrderPdfService
             'margin-right'             => 10, // 1cm
             'header-spacing'         => 5,
             'footer-spacing'         => 5,
+            'footer-center'            => '[page] - [topage]',
         ];
 
         // 5. Delegar a Geração do PDF
