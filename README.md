@@ -1,61 +1,228 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SmartOS-PDF 🚀
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📘 Visão Geral
 
-## About Laravel
+**SmartOS-PDF** é uma aplicação web desenvolvida com **PHP e Laravel** para gerar **Ordens de Serviço (OS) em formato PDF**, com fidelidade visual ao modelo original e controle rigoroso de quebras de página. É ideal para casos em que se deseja imprimir documentos com muitos itens de forma organizada e profissional.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Desafio Técnico
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Este projeto foi desenvolvido como solução para um desafio técnico envolvendo:
 
-## Learning Laravel
+- **Fidelidade Visual**: O PDF deve replicar exatamente o layout fornecido.
+- **Conteúdo Dinâmico**: Suporte para mais de 80 itens com alturas variáveis de texto.
+- **Quebras de Página Controladas**:
+  - Margens superiores e inferiores fixas (mínimo 1 cm).
+  - Nenhum item deve ser cortado entre páginas.
+  - Cabeçalho aparece **somente na primeira página**.
+  - Demais páginas mantêm a margem superior, sem o cabeçalho completo.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🛠️ Tecnologias
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PHP 8.x**
+- **Laravel 10.x / 11.x**
+- **MySQL**
+- **[wkhtmltopdf](https://wkhtmltopdf.org/)** – conversão de HTML em PDF
+- **[Laravel Snappy](https://github.com/barryvdh/laravel-snappy)** – wrapper Laravel para wkhtmltopdf
+- **WSL (Ubuntu/Linux no Windows)** – ambiente de desenvolvimento
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ✅ Funcionalidades Principais
 
-### Premium Partners
+- **Geração de PDFs de Alta Qualidade**
+- **Layout Adaptativo para muitos itens**
+- **Cabeçalhos e rodapés dinâmicos e configuráveis**
+- **Código limpo e estruturado com princípios SOLID e Clean Code**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## ⚙️ Instalação e Configuração
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🔧 Pré-requisitos
 
-## Code of Conduct
+- PHP 8.x
+- Composer
+- MySQL
+- WSL com Ubuntu
+- `wkhtmltopdf` instalado
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. Clone o repositório
 
-## Security Vulnerabilities
+```bash
+git clone https://github.com/alispnor/SmartOS-PDF.git
+cd SmartOS-PDF
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Instale dependências e configure o Laravel
 
-## License
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 3. Configure o banco de dados
+
+Edite seu arquivo `.env` com suas credenciais:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=aero_os_gen
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Crie o banco:
+
+```bash
+mysql -u root -p
+```
+
+No prompt do MySQL:
+
+```sql
+CREATE DATABASE aero_os_gen CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+exit;
+```
+
+### 4. Instale o wkhtmltopdf
+
+Desinstale versões antigas:
+
+```bash
+sudo apt remove --purge wkhtmltopdf
+sudo apt autoremove
+```
+
+Baixe o `.deb` compatível com seu Ubuntu:  
+👉 https://wkhtmltopdf.org/downloads.html
+
+```bash
+wget <LINK_DO_ARQUIVO_DEB>
+sudo apt install ./<NOME_DO_ARQUIVO>.deb
+```
+
+Verifique o caminho do binário:
+
+```bash
+which wkhtmltopdf
+```
+
+Adicione no `.env`:
+
+```env
+WKHTMLTOPDF_BINARY="/usr/local/bin/wkhtmltopdf"  # Ou caminho retornado
+```
+
+### 5. Instale o Laravel Snappy
+
+```bash
+composer require barryvdh/laravel-snappy
+php artisan vendor:publish --provider="Barryvdh\Snappy\ServiceProvider"
+```
+
+### 6. Configure o Snappy (`config/snappy.php`)
+
+```php
+'pdf' => [
+    'enabled' => true,
+    'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/bin/wkhtmltopdf'),
+    'timeout' => false,
+    'options' => [
+        'print-media-type'         => true,
+        'enable-local-file-access' => true,
+        'encoding'                 => 'UTF-8',
+        'no-stop-slow-scripts'     => true,
+        'enable-javascript'        => true,
+    ],
+    'keep-temp' => true,
+    'env' => [
+        'LANG' => env('SNAPPY_PDF_ENV_LANG', 'en_US.UTF-8'),
+    ],
+],
+```
+
+### 7. Configure o Service Provider e Services
+
+Verifique se os seguintes arquivos existem e estão corretamente configurados:
+
+- `app/Providers/PdfServiceProvider.php`
+- `app/Contracts/PdfGenerator.php`
+- `app/Services/Pdf/SnappyPdfGenerator.php`
+- `app/Services/Pdf/ServiceOrderPdfService.php`
+
+### 8. Execute migrações e seeders
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 9. Limpe cache e rode o servidor
+
+```bash
+php artisan optimize:clear
+php artisan serve
+```
+
+---
+
+## 📄 Como Usar
+
+Para gerar uma OS em PDF, acesse:
+
+```
+http://127.0.0.1:8000/os/{id}/pdf
+```
+
+Substitua `{id}` pelo ID de uma OS existente (ex: `1`, criada pelos seeders).
+
+---
+
+## 🐞 Depuração e Ajustes Finais
+
+### 📂 HTML Temporário
+
+Com `keep-temp` ativado, os arquivos são salvos em `/tmp`. No Windows:
+
+```
+\\wsl.localhost\Ubuntu\tmp\
+```
+
+Abra no navegador e use o DevTools para ajustar margens, tamanhos e quebras.
+
+### 🎨 CSS
+
+Edite os arquivos Blade:
+
+- `pdf/partials/header.blade.php`
+- `pdf/partials/footer.blade.php`
+- `pdf/service-order.blade.php`
+
+Ajuste propriedades como `width`, `height`, `margin`, `line-height`, `font-size`, etc.
+
+### 🧪 Ajuste de Quebras
+
+No arquivo `ServiceOrderPdfService.php`, configure:
+
+- `margin-top`, `margin-bottom`
+- `header-spacing`, `footer-spacing`
+
+Verifique a altura real dos elementos no navegador.
+
+---
+
+## 🤝 Contribuição
+
+Sinta-se à vontade para abrir **issues**, sugerir melhorias ou fazer pull requests.
+
+---
+
+## 📜 Licença
+
+Este projeto está licenciado sob a licença ALI.
