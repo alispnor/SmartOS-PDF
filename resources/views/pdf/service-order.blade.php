@@ -66,9 +66,8 @@
         }
         
         /* Estilos específicos para a tabela de dados da aeronave (baseado no PDF) */
-        .aircraft-data-table td:nth-child(1) { width: 20%; } /* AIRFRAME, LEFT ENGINE etc. */
-        .aircraft-data-table td:nth-child(2) { width: 54%; border: none;} /* Conteúdo principal (Modelo, Fabricante, SN, etc.) */
-        .aircraft-data-table td:nth-child(3) { width: 30%; border: none; } /* Última coluna (Ano de Fabricação, CSO) */
+        .aircraft-data-table td:nth-child(1) { width: 10%; } /* AIRFRAME, LEFT ENGINE etc. */
+        .aircraft-data-table td:nth-child(2) { width: 90%;  border-bottom: none; } /* Conteúdo principal (Modelo, Fabricante, SN, etc.) */
         
         .aircraft-data-table-end {
             border: none;
@@ -79,13 +78,40 @@
         .aircraft-data-table-end td:nth-child(1) {   border: none; text-align: center; padding-top:20px; } 
         .aircraft-data-table-end td:nth-child(2) {   border: none; text-align: center; padding-top:20px;} 
 
-        .aircraft-itensa-table{
+        .aircraft-itens-table{
             border: 1px solid #adadad;
             width: 100%;
         }
 
-         .aircraft-data-table td:nth-child(1) { width: 10%; } 
-        .aircraft-data-table td:nth-child(2) { width: 90%; border: none;}
+            .aircraft-item-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+                margin-bottom: 0;
+            }
+
+            .aircraft-item-table td {
+                padding: 8px;
+                text-align: left;
+                border: none;
+                vertical-align: top;
+            }
+
+            /* Aplica 25% de largura para as células nas linhas que contêm 4 colunas */
+            .aircraft-item-table tr:not(:last-child) td {
+                width: 25%;
+            }
+
+            /* A célula da última linha (que tem colspan="4") ocupa 100% */
+            .aircraft-item-table tr:last-child td {
+                width: 100%;
+            }
+
+            .aircraft-item-table strong {
+                color: #333;
+            }
+
+        
         
          .header-seconde-table{
             width: 100%;
@@ -134,25 +160,48 @@
                             <td rowspan="2"><strong>{{ str_replace('_', ' ', $type) }}</strong></td>
                             <td>
                                 @if($part)
-                                    <strong>Modelo:</strong> {{ $part->model ?? 'N/A' }}<br>
-                                    <strong>Fabricante: </strong>{{ $part->manufacturer ?? 'N/A' }}<br>
-                                    <strong>SN:</strong> {{ $part->sn ?? 'N/A' }}<br>
-                                   <strong> CSN: </strong>{{ $part->csn ?? 'N/A' }}<br>
-                                    <strong>TSO:</strong> {{ $part->tso ?? 'N/A' }}<br>
-                                    <strong>TSN: </strong>{{ $part->tsn ?? 'N/A' }}<br>
-                                    <strong>Revisão:</strong> Manual:{{ $part->revision_manual ?? 'N/A' }} / Revision: {{ $part->revision_pn ?? 'N/A' }}
+                                    <table class="aircraft-item-table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>SN:</strong> {{ $part->sn ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>Modelo:</strong> {{ $part->model ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>Fabricante:</strong> {{ $part->manufacturer ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>Ano de Fabricação:</strong> {{ $part->manufacture_year ?? 'N/A' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>TSN:</strong> {{ $part->tsn ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>TSO:</strong> {{ $part->tso ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>CSN:</strong> {{ $part->csn ?? 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <strong>CSO:</strong> {{ $part->cso ?? 'N/A' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <strong>Revisão:</strong> Manual: {{ $part->revision_manual ?? 'N/A' }} / Revision: {{ $part->revision_pn ?? 'N/A' }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 @else
                                    <strong> N/A</strong>
                                 @endif
                             </td>
-                            <td>
-                                @if($part)
-                                    <strong>Ano de Fabricação: </strong>{{ $part->manufacture_year ?? 'N/A' }}<br>
-                                   <strong> CSO: </strong>{{ $part->cso ?? 'N/A' }}
-                                @else
-                                    <strong>N/A</strong>
-                                @endif
-                            </td>
+                            
                         </tr>
                         <tr>
                             <td colspan="2" style="border-top: none;"></td> 
@@ -176,7 +225,7 @@
 
         <h2>RESUMO DE ITENS EXECUTADOS</h2>
         <section>
-            <table class="aircraft-itensa-table">
+            <table class="aircraft-itens-table">
                  <tbody>
             @foreach($serviceItems as $item)
             <tr>

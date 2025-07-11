@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <style>
-        /* Estilos CSS para o rodapé */
         body { margin: 0; padding: 0; }
         .footer-container {
             width: 100%;
@@ -33,5 +32,5 @@
             <span class="float-right">Página <span class="page"></span> de <span class="topage"></span></span>
         </div>
     </div>
-    </body>
+</body>
 </html>

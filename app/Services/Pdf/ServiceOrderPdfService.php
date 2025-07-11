@@ -62,11 +62,11 @@ class ServiceOrderPdfService
             'encoding'               => 'UTF-8',
             'no-stop-slow-scripts'   => true,
             'enable-local-file-access' => true,
-            'enable-javascript'      => false,
+            'enable-javascript'      => true,
             'header-html'            => $headerHtml,
             'footer-html'            => $footerHtml,
-            'margin-top'               => 30, // em mm (4.5cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU HEADER HTML
-            'margin-bottom'            => 25, // em mm (3.0cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU FOOTER HTML
+            'margin-top'               => 40, // em mm (4.5cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU HEADER HTML
+            'margin-bottom'            => 35, // em mm (3.0cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU FOOTER HTML
             'margin-left'              => 10, // 1cm
             'margin-right'             => 10, // 1cm
             'header-spacing'         => 5,

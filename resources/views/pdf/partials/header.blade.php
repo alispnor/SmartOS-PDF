@@ -48,10 +48,15 @@
             font-size: 11pt;
         }
 
+         .header-top-row-td .col-center-info-sub-title_right {
+            text-align: center;
+            font-size: 11pt;
+            line-height: 1.2;
+        }
+
         .header-top-row-td .col-right-info {
             width: 25%; /* Largura para referência/datas */
             text-align: right;
-            font-size: 11pt;
             line-height: 1.2; /* Espaçamento entre linhas */
         }
 
@@ -102,8 +107,8 @@
                     <p class="col-center-info-sub-title">Sorocaba/SP COM 201306-41/ANAC</p>
                 </td>
                 <td class="header-top-row-td col-right-info">
-                    <p>{{ $serviceOrder->document_reference }}</p>
-                    <p>{{ \Carbon\Carbon::parse($serviceOrder->document_date)->format('d/m/Y') }}</p>
+                    <p class="col-center-info-sub-title_right">{{ $serviceOrder->document_reference }}</p>
+                    <p class="col-center-info-sub-title_right">{{ \Carbon\Carbon::parse($serviceOrder->document_date)->format('d/m/Y') }}</p>
                 </td>
             </tr>
            
