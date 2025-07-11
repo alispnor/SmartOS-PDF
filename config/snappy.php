@@ -35,7 +35,7 @@ return [
     
     'pdf' => [
         'enabled' => true,
-        'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/bin/wkhtmltopdf'), // O caminho que `which wkhtmltopdf` mostrou
+        'binary'  => env('WKHTMLTOPDF_BINARY', '/usr/local/bin/wkhtmltopdf'), // O caminho que `which wkhtmltopdf` mostrou
         'timeout' => false,
         'options' => [
             // 'tmp' => storage_path('app/snappy_tmp'),
@@ -45,13 +45,15 @@ return [
             'no-stop-slow-scripts'     => true,
             'enable-javascript'        => true,
         ],
-        'keep-temp' => true, // <-- ESSA LINHA PRECISA ESTAR AQUI!
-        'env'     => [],
+        'keep-temp' => true,
+        'env'     => [
+             'LANG' => env('SNAPPY_PDF_ENV_LANG', 'en_US.UTF-8'),
+        ],
     ],
     
     'image' => [
         'enabled' => true,
-        'binary'  => env('WKHTML_IMG_BINARY', '/usr/bin/wkhtmltoimage'),
+        'binary'  => env('WKHTML_IMG_BINARY', '/usr/local/bin/wkhtmltoimage'),
         'timeout' => false,
         'options' => [],
         'env'     => [],

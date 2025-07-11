@@ -1,12 +1,37 @@
-<div style="width: 100%; text-align: center; font-family: Arial, sans-serif; font-size: 8pt; border-top: 1px solid #ccc; padding-top: 5px; padding-bottom: 5px; box-sizing: border-box; padding-left: 1cm; padding-right: 1cm;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-        <span style="float: left;">{{ $serviceOrder->document_reference }}</span>
-        <div style="text-align: center; font-family: Arial, sans-serif; font-size: 8pt; border-top: 1px solid black; padding: 5px; background-color: #f0f0f0;">
-            Página <span class="page"></span> de <span class="topage"></span>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        /* Estilos CSS para o rodapé */
+        body { margin: 0; padding: 0; }
+        .footer-container {
+            width: 100%;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 8pt;
+            border-top: 1px solid #ccc;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            box-sizing: border-box;
+            padding-left: 1cm;
+            padding-right: 1cm;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .float-left { float: left; }
+        .float-right { float: right; }
+    </style>
+</head>
+<body>
+    <div class="footer-container">
+        <div class="footer-content">
+            <span class="float-left">{{ $serviceOrder->document_reference }}</span>
+            <span class="float-right">Página <span class="page"></span> de <span class="topage"></span></span>
         </div>
     </div>
-    <script>
-        // O wkhtmltopdf substitui automaticamente os spans com classes 'page' e 'topage'
-        // Não é necessário JavaScript adicional aqui para funcionalidade básica.
-    </script>
-</div>
+    </body>
+</html>

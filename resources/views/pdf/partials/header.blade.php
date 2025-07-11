@@ -1,47 +1,134 @@
-<div style="width: 100%; font-family: Arial, sans-serif; font-size: 8pt; box-sizing: border-box; padding: 0 1cm;">
-    <div id="full-header-content" style="
-        display: flex; /* Mantém flex para o layout interno */
-        justify-content: space-between;
-        align-items: flex-end;
-        padding-top: 10px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #000;
-        margin-bottom: 5px;
-        height: auto; /* Deixa a altura se ajustar ao conteúdo */
-        overflow: visible; /* Garante que nada seja cortado */
-        /* Removido position: absolute para evitar conflitos de fluxo, se você o tinha */
-    ">
-        <div style="text-align: center; font-family: Arial, sans-serif; font-size: 10pt; background-color: #f0f0f0; padding: 5px; border-bottom: 1px solid black;">
-            <img src="file:///home/ali/Projetos/SmartOS-PDF/public/images/mtx_logo.png" alt="MTX Aviation Logo" style="height: 30px; display: block; margin: 0 auto 5px auto;">
-            <p style="margin: 0;">MTX Aviation - Ordem de Serviço #{{ $serviceOrder->os_number }}</p>
-            <p style="margin: 0; font-size: 8pt;">Documento Ref: {{ $serviceOrder->document_reference }}</p>
-        </div>
-        <div style="width: 45%; text-align: right;">
-            <p style="margin: 0; font-size: 14pt; font-weight: bold;">OS #{{ $serviceOrder->os_number }}</p>
-            <p style="margin: 0;">{{ $serviceOrder->document_reference }}</p>
-            <p style="margin: 0;">{{ \Carbon\Carbon::parse($serviceOrder->document_date)->format('d/m/Y') }}</p>
-            <p style="margin: 0; margin-top: 5px;">PP-JCA</p>
-            <p style="margin: 0;">Data de Início: {{ \Carbon\Carbon::parse($serviceOrder->start_date)->format('d/m/Y') }}</p>
-            <p style="margin: 0;">Término Previsto: {{ \Carbon\Carbon::parse($serviceOrder->end_date)->format('d/m/Y') }}</p>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; font-size: 8pt; }
 
-    <div id="subsequent-page-spacer" style="height: 1cm; background-color: transparent;"></div>
+        /* Container da tabela principal do cabeçalho */
+        .header-main-table {
+            width: 100%;
+            border-collapse: collapse; /* Remove espaçamento entre células */
+            border: 1px solid #adadad; /* Borda externa do cabeçalho, se houver no original */
+            box-sizing: border-box;
+            padding: 0; /* Remover padding aqui, o padding será nas células */
+           
+        }
+       
+
+        .header-main-table td {
+            border: 1px solid #adadad; /* Bordas internas das células */
+            padding: 5px; /* Padding interno das células */
+            vertical-align: top; /* Alinha o conteúdo ao topo da célula */
+        }
+
+        /* Linha Superior */
+        .header-top-row-td {
+            height: 80px; /* Altura fixa para a linha superior, ajuste conforme o PDF original */
+        }
+
+        .header-top-row-td .col-logo {
+            width: 20%; /* Largura para o logo */
+            text-align: left;
+        }
+
+        .header-top-row-td .col-center-info {
+            width: 55%; /* Largura para info da empresa */
+            text-align: center;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+          .header-top-row-td .col-center-info-title {
+             text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+         .header-top-row-td .col-center-info-sub-title {
+            text-align: center;
+            font-size: 11pt;
+        }
+
+        .header-top-row-td .col-right-info {
+            width: 25%; /* Largura para referência/datas */
+            text-align: right;
+            font-size: 11pt;
+            line-height: 1.2; /* Espaçamento entre linhas */
+        }
+
+        /* Imagem do Logo */
+        .col-logo img {
+            height: 70px; /* Aumentado para 70px para o logo maior */
+            display: block;
+            margin: 0; /* Remove margens extras */
+        }
+
+        /* Linha Inferior */
+        .header-bottom-row-td {
+            height: 30px; /* Altura fixa para a linha inferior, ajuste conforme o PDF original */
+        }
+        .header-bottom-row-td .col-os-number {
+            width: 50%;
+            text-align: left;
+            
+        }
+        .header-bottom-row-td .col-aircraft-reg {
+            width: 50%;
+            text-align: right;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        /* Outros estilos para parágrafos no cabeçalho */
+        .header-main-table p {
+            margin: 0; /* Remove margens padrão dos parágrafos */
+        }
+
+        /* Espaçador para páginas subsequentes (será controlado pelo JS) */
+        .spacer {
+            height: 1cm; /* Altura do espaçador */
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <table class="header-main-table">
+            <tr>
+                <td class="header-top-row-td col-logo">
+                    <img src="file://{{ public_path('images/mtx_logo.png') }}" alt="MTX Aviation Logo">
+                </td>
+                <td class="header-top-row-td col-center-info">
+                    <p class="col-center-info-title">MTX Aviation Manutenção De Aeronaves Ltda</p>
+                    <p class="col-center-info-sub-title">Sorocaba/SP COM 201306-41/ANAC</p>
+                </td>
+                <td class="header-top-row-td col-right-info">
+                    <p>{{ $serviceOrder->document_reference }}</p>
+                    <p>{{ \Carbon\Carbon::parse($serviceOrder->document_date)->format('d/m/Y') }}</p>
+                </td>
+            </tr>
+           
+        </table>
+
+        </div>
+
+    <div id="subsequent-page-spacer" class="spacer" style="display: none;"></div>
 
     <script>
-        var fullHeader = document.getElementById('full-header-content');
+        // O JavaScript para controlar a visibilidade da tabela principal do cabeçalho por página
+        var fullHeaderTable = document.querySelector('.header-main-table'); // Seleciona a tabela
         var spacer = document.getElementById('subsequent-page-spacer');
 
-        if (fullHeader && spacer) {
+        if (fullHeaderTable && spacer) {
             if (typeof page !== 'undefined' && page > 1) {
-                // Se for uma página subsequente: esconde o cabeçalho completo, mostra o espaçador
-                fullHeader.style.display = 'none';
-                spacer.style.display = 'block'; // Usar 'block' para o espaçador é mais seguro
+                // Páginas subsequentes: esconde a tabela do cabeçalho, mostra o espaçador
+                fullHeaderTable.style.display = 'none';
+                spacer.style.display = 'block';
             } else {
-                // Se for a primeira página: mostra o cabeçalho completo, esconde o espaçador
-                fullHeader.style.display = 'flex';
+                // Primeira página: mostra a tabela do cabeçalho, esconde o espaçador
+                fullHeaderTable.style.display = 'table'; // Exibe como tabela
                 spacer.style.display = 'none';
             }
         }
     </script>
-</div>
+</body>
+</html>

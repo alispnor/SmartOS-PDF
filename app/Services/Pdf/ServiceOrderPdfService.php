@@ -48,29 +48,29 @@ class ServiceOrderPdfService
         // Transforma o template principal (corpo do PDF) em HTML.
         $htmlContent = View::make('pdf.service-order', $data)->render();
           // Geração dos HTMLs de cabeçalho e rodapé
-        // $headerHtml = $this->getHeaderHtml($order);
-        $headerHtml = View::make('pdf.partials.header_test')->render();
+        $headerHtml = $this->getHeaderHtml($order);
+        // $headerHtml = View::make('pdf.partials.header_test')->render();
         $footerHtml = $this->getFooterHtml($order);
-         // Log para ver o conteúdo do HTML gerado para cabeçalho/rodapé
-        Log::debug('ServiceOrderPdfService: HTML do Cabeçalho Gerado:', ['html' => $headerHtml]);
-        Log::debug('ServiceOrderPdfService: HTML do Rodapé Gerado:', ['html' => $footerHtml]);
+        //  // Log para ver o conteúdo do HTML gerado para cabeçalho/rodapé
+        // Log::debug('ServiceOrderPdfService: HTML do Cabeçalho Gerado:', ['html' => $headerHtml]);
+        // Log::debug('ServiceOrderPdfService: HTML do Rodapé Gerado:', ['html' => $footerHtml]);
 
         // 4. Configurar Opções do wkhtmltopdf
         $options = [
-            'header-html'            => $headerHtml,
             'print-media-type'       => true,
             'enable-local-file-access' => true,
             'encoding'               => 'UTF-8',
             'no-stop-slow-scripts'   => true,
+            'enable-local-file-access' => true,
             'enable-javascript'      => false,
-
+            'header-html'            => $headerHtml,
             'footer-html'            => $footerHtml,
-            'margin-top'               => 50, // em mm (4.5cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU HEADER HTML
-            'margin-bottom'            => 35, // em mm (3.0cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU FOOTER HTML
+            'margin-top'               => 30, // em mm (4.5cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU HEADER HTML
+            'margin-bottom'            => 25, // em mm (3.0cm) - DEVE SER MAIOR QUE A ALTURA REAL DO SEU FOOTER HTML
             'margin-left'              => 10, // 1cm
             'margin-right'             => 10, // 1cm
-            'header-spacing'         => 10,
-            'footer-spacing'         => 10,
+            'header-spacing'         => 5,
+            'footer-spacing'         => 5,
         ];
 
         // 5. Delegar a Geração do PDF
